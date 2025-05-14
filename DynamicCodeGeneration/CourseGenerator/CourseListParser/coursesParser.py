@@ -7,7 +7,7 @@ courseCSV = open("courseCatalog.csv", 'w', newline='')
 courseCSVWriter = csv.writer(courseCSV)
 courseCSVWriter.writerow(["Department", "Course Number", "Course Name", "Credits", "Semesters Offered", "Pre-Requisite(s)"])
 
-catalogIO =  open("courseCatalog.html", 'r')
+catalogIO =  open("DynamicCodeGeneration/CourseGenerator/CourseListParser/courseCatalog.html", 'r')
 
 course = catalogIO.readline()
 line : str = catalogIO.readline()
@@ -38,12 +38,13 @@ while line:
         prereqs = re.search(r"Pre-Requisite\(s\):<\/strong>\s*(.*)", course)
 
         if prereqs:
-            print("prereqs: " + prereqs.group(1))
+            prereqs = re.sub(r'([A-Za-z][A-Za-z]+) ([0-9]{4})', r'\1\2', prereqs.group(1))
+            print("prereqs: " + prereqs)
         else:
             print("No prereqs match")
 
         # print(course)
-        courseCSVWriter.writerow([header.group(1), header.group(2), header.group(3), otherInfo.group(1), otherInfo.group(3), prereqs.group(1) if prereqs else ""])
+        courseCSVWriter.writerow([header.group(1), header.group(2), header.group(3), otherInfo.group(1), otherInfo.group(3), prereqs])
         course = line
         
     

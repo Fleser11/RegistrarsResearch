@@ -1,0 +1,28 @@
+{
+    "info": {
+        "code": "GenEd",
+        "program": "General Education Courses"
+    },
+    "subAudit": {
+        "core": {
+            "cardinality": "ALL",
+            "courses": [
+                "UN1015",
+                "UN1025",
+                "abstract_CriticalCreativeThinking",
+                "abstract_SocialEthicalResponsibility"
+            ]
+        },
+        "HASS": {
+            "cardinality": "ALL",
+            "courses": [
+                "abstract_CommComp",
+                "abstract_HumanditiesFineArts",
+                "abstract_SocialandBehavioralSciences",
+                "abstract_HASS"
+            ]
+        }
+    },
+    "link": {
+    }
+}

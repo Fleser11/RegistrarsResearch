@@ -1,0 +1,27 @@
+<h1>Audit JSON Files</h1>
+
+<p>
+    Audit JSON Files should follow a specific format when created.
+</p>
+<ul>
+    <li>"info" - Object maping to data about the audit</li>
+    <ul>
+        <li>"code" - The code for the audit</li>
+        <li>"code" - The code for the audit</li>
+    </ul>
+    <li>"subAudit" - Object mapping sets of types of courses</li>
+    <ul>
+        <li>course groups (these names are unspecified but are strings)</li>
+            each of the groups will follow a format of:
+            <ul>
+                <li>"cardinality" - (all should be used if all must exist)</li>
+                <li>"courses" - maps to a list of course codes</li>
+                *abstract courses can be declared by prefixing the course code with "abstract_" ex. "abstract_CS4000" for a 4000 level CS course
+            </ul>
+    </ul>
+    <ul>
+        <li>
+            "UReqs" - Object mapping to a path for a university requirements json
+        </li>
+    </ul>
+</ul>

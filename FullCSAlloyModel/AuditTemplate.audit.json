@@ -1,0 +1,26 @@
+{
+    "info": {
+        "code": "<AUDIT_CODE>",
+        "program": "<PROGRAM_NAME>"
+    },
+    "subAudit": {
+        "<COURSE_GROUP_NAME>": {
+            "cardinality": "<REQUIRED_OR_OPTIONAL>",
+            "courses": [
+                "<COURSE_CODE_1>",
+                "<COURSE_CODE_2>",
+                "<COURSE_CODE_3>"
+            ]
+        },
+        "<ANOTHER_COURSE_GROUP>": {
+            "cardinality": "<AT_LEAST_ONE_OR_ALL>",
+            "courses": [
+                "<abstract_COURSE_CODE>", 
+                "<COURSE_CODE_N>"
+            ]
+        }
+    },
+    "link": {
+        "path": "<UNIVERSITY_REQUIREMENTS_JSON>"
+    }
+}
