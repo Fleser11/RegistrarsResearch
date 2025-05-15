@@ -2,7 +2,6 @@ module AuditTemporal
 
 open coursesTemporal
 
-
 pred prereqsMet[c: Course]{
 	all p: c.prereqs | once p in passedCourses
 }
@@ -16,8 +15,6 @@ pred semester {
 	#semCourses <= 4
 	no k : semCourses' | once k in semCourses
 }
-
-
 
 fact{
 	no semCourses

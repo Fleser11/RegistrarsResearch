@@ -60,9 +60,10 @@
             ]
         },
         "ConcentrationRequirement": {
-            "cardinality": "4",
+            "cardinality": "ALL",
             "courses": [
-                "abstract_CS4000",
+                "abstract_CS4000a",
+                "abstract_CS4000b",
                 "MA2160",
                 "abstract_MA3000"
             ]

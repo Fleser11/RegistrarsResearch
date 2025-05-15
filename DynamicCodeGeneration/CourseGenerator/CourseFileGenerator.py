@@ -14,7 +14,6 @@ class CourseFileGenerator:
             self.courseCatalog = args[0]
         elif len(args) == 0:
             self.courseCatalog = CourseCollection.CourseCatalog()
-        self.courseCatalog = CourseCollection.CourseCatalog()
 
 
     def load_course_prereqs_recursive(self, courseCollection: CourseCollection.CourseCollection, course: str) -> list[str]:
@@ -62,7 +61,7 @@ class CourseFileGenerator:
                         for x in re.findall(r"(?<!abstract_)([a-zA-Z][a-zA-Z]+[0-9][0-9][0-9][0-9])", course):
                             self.load_course_prereqs_recursive(normalCourseCollection, x)
                         for x in re.findall(r"(abstract_[a-zA-Z0-9]*)", course):
-                            abstractCourses.append(audit["info"]["code"]+x)
+                            abstractCourses.append(audit["info"]["code"]+"_"+x)
                 if "path" not in audit["link"]:
                     break
                 else:

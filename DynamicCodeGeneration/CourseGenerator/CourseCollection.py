@@ -35,7 +35,10 @@ class CourseCollection:
             courseName = self.dept + self.num
 
             header = f"one sig {courseName} extends {self.dept + "Course"}"+"{}{\n"
-            body = f"{re.sub(r'([A-Za-z][A-Za-z]+[0-9]{4})(\(C\))?', r'\1 in prereqs', self.prereqs)} \nthis in Course{int(int(self.num)/1000)*1000}\n" + "}" + "\n"
+            if self.prereqs.find("ALEKS") == -1 and self.prereqs.find("CEEB") == -1:
+                body = f"{re.sub(r'([A-Za-z][A-Za-z]+[0-9]{4})(\(C\))?', r'\1 in prereqs', self.prereqs)} \nthis in Course{int(int(self.num)/1000)*1000}\n" + "}" + "\n"
+            else:
+                body = f"this in Course{int(int(self.num)/1000)*1000}\n" + "}\n"
 
             return header + body
 
