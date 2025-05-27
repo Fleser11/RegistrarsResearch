@@ -1,4 +1,4 @@
-
+#Finds all the departments in the course catalog and writes them to a CSV file
 
 import csv
 import re

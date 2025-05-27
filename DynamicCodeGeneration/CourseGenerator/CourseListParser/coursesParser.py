@@ -1,3 +1,4 @@
+#Parses the HTML file to get all of the courses and put them into the csv
 
 
 import re

@@ -1,11 +1,20 @@
+#Creates a course file and an audit file from the course catalog and the audit json file
+
 import json
 import re
 from itertools import islice
 import CourseFileGenerator
 
 class AuditGenerator:
+    """Generates the audit file from the audit json file."""
+
 
     def __init__(self, audit_json_path: str):
+        """Initializes the AuditGenerator with the audit json file.
+
+        Args:
+            audit_json_path (str): The path to the audit json file.
+        """
         self.audit_file_str= audit_json_path
         self.audit = json.load(open(audit_json_path, 'r'))
         self.CourseFileGenerator = CourseFileGenerator.CourseFileGenerator()
@@ -21,8 +30,10 @@ class AuditGenerator:
             str: The formatted reqs string
         """
 
+        #replaces all non with a C with ones without the C
         reqs = re.sub(r'(?<!abstract_)([A-Za-z][A-Za-z]+[0-9]{4})(\(C\))?', r'\1 in reqs', reqs)
 
+        #if there is an audit file prefixes with the name
         if audit_file:
             reqs = re.sub(r'(abstract_[a-zA-Z0-9]*)', f"{audit_file}_" + r'\1 in reqs', reqs)
         else:
@@ -31,9 +42,15 @@ class AuditGenerator:
         return reqs
 
     def generate_audit_file(self, output_file_name: str, course_file_name: str):
-
+        """Generates the audit file from the audit json file. 
+        Args:
+            output_file_name (str): The name of the output file.
+            course_file_name (str): The name of the course file.
+        """
+        
         header = f"open {course_file_name.removesuffix(".als")}\n"
 
+        #header is always the same (for now anyhow)
         header += """
 
 pred prereqsMet[c: Course]{
@@ -67,21 +84,27 @@ abstract sig AuditBlock{
 }
 """
 
-        
+        #collects all the subaudits
         subAudits = []
         body = ""
         audit = self.audit
-        while True:
+        while True: #reads through all of the subAudits and requires each of the courses in each one
+
+            #adds each audit block to the body
             for name, subAudit in audit["subAudit"].items():
+
+                #uses a unique name of the audit code and the name of the subAudit
                 subAudits.append(audit["info"]["code"]+"_"+name)
                 body += f"one sig {audit["info"]["code"]+"_"+name} extends AuditBlock {"{}{"}\n"
-                if subAudit["cardinality"] == "ALL":
+                
+                #switches between two modes of either including all the courses or just specified ones and requiring a specific cardinality
+                if subAudit["cardinality"] == "ALL":#adds all the courses
                     for i, course in enumerate(subAudit["courses"]):
                         if course.startswith("abstract_"):
                             body += f"{"and" if i > 0 else ""} (some c: {audit["info"]["code"]}_{course}| c in reqs)\n"
                         else:
                             body += f'{"and" if i > 0 else ""} ({AuditGenerator.format_reqs_str(course, audit["info"]["code"])})\n'
-                else:
+                else: #adds all of the courses and requires the cardinality
                     body += f'#reqs = {subAudit["cardinality"]}\n'
                     body += re.sub(r'(abstract_[a-zA-Z0-9]*)', f"{audit["info"]["code"]}_" + r'\1', 'reqs in (' + " + ".join(subAudit["courses"])+")\n")
                     # body += f'({AuditGenerator.format_reqs_str(subAudit["courses"][0], audit["info"]["code"])})\n'
@@ -109,6 +132,7 @@ pred complete{
 run {eventually complete} for 74 Course, exactly 8 steps"""
             
 
+        #Puts all of the major components of the audit file
         with open(output_file_name, 'w') as output_file:
             output_file.write(header)
             output_file.write(body)
@@ -116,6 +140,12 @@ run {eventually complete} for 74 Course, exactly 8 steps"""
             output_file.write(run)
 
     def generate_model(self, output_file_name):
+        """Generates the model from the audit json file. Doing both the course file and the audit file.
+
+        Args:
+            output_file_name (str): The name of the output file.
+        """
+
         self.CourseFileGenerator.generate_course_file(f"courses_{output_file_name}", self.audit_file_str)
         self.generate_audit_file(output_file_name, f"courses_{output_file_name}")
 

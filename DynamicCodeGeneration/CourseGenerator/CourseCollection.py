@@ -1,3 +1,5 @@
+#Defines what a collection of courses is and defines the catalog
+
 import os
 import csv
 import dill
@@ -7,13 +9,6 @@ import re
 
 class CourseCollection:
     """A collection of courses.
-
-    Raises:
-        IndexError: _description_
-        TypeError: _description_
-
-    Returns:
-        _type_: _description_
     """
 
     class Course:
