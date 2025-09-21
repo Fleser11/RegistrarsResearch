@@ -6,16 +6,18 @@ import csv
 
 courseCSV = open("courseCatalog.csv", 'w', newline='')
 courseCSVWriter = csv.writer(courseCSV)
-courseCSVWriter.writerow(["Department", "Course Number", "Course Name", "Credits", "Semesters Offered", "Pre-Requisite(s)"])
+courseCSVWriter.writerow(["code", "dept", "number", "name", "credits", "semester", "prereqs", "description"])
 
 catalogIO =  open("DynamicCodeGeneration/CourseGenerator/CourseListParser/courseCatalog.html", 'r')
 
 course = catalogIO.readline()
 line : str = catalogIO.readline()
+
 while line:
     if line.find("<h4>") == -1 and line.find("</article>") == -1:
         course = "".join([course, line])
     else:
+        print(course)
         header = re.match(r"<h4>([A-Z]*) ([0-9]*T*) - (.*)<\/h4>", course)
         if header:
             print("dept: " + header.group(1))
@@ -24,6 +26,14 @@ while line:
         else:
             print("No header match")
             raise Exception("No header match")
+
+        description = re.search(r"<p.*?>\n(.*?)\n<\/p>", course)
+        if description:
+            print("description: " + description.group(1))
+        else:
+            print("No description match")
+            print(course)
+            raise Exception("No description match")
 
         otherInfo = re.search(r"Credits:<\/strong> \n([0-9]*.[0-9]|var)(.|\s)*?Semesters Offered:<\/strong> \n(.*?)<\/li>(.|\s)*?", course)
         
@@ -45,7 +55,7 @@ while line:
             print("No prereqs match")
 
         # print(course)
-        courseCSVWriter.writerow([header.group(1), header.group(2), header.group(3), otherInfo.group(1), otherInfo.group(3), prereqs])
+        courseCSVWriter.writerow([header.group(1) + header.group(2), header.group(1), header.group(2), header.group(3), otherInfo.group(1), otherInfo.group(3), prereqs, description.group(1)])
         course = line
         
     

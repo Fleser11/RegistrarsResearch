@@ -20,7 +20,7 @@ class AuditGenerator:
         self.CourseFileGenerator = CourseFileGenerator.CourseFileGenerator()
 
 
-    def format_reqs_str(reqs: str, audit_file: str | None) -> str:
+    def format_reqs_str(reqs: str, audit_file: str | None, subAudit: str) -> str:
         """Formats the reqs string to add the in reqs statement.
 
         Args:
@@ -31,13 +31,13 @@ class AuditGenerator:
         """
 
         #replaces all non with a C with ones without the C
-        reqs = re.sub(r'(?<!abstract_)([A-Za-z][A-Za-z]+[0-9]{4})(\(C\))?', r'\1 in reqs', reqs)
+        reqs = re.sub(r'(?<!abstract_)([A-Za-z][A-Za-z]+[0-9]{4})(\(C\))?', fr'\1', reqs)
 
         #if there is an audit file prefixes with the name
         if audit_file:
-            reqs = re.sub(r'(abstract_[a-zA-Z0-9]*)', f"{audit_file}_" + r'\1 in reqs', reqs)
+            reqs = re.sub(r'(abstract_[a-zA-Z0-9]*)', f"{audit_file}_" + fr'\1 in {subAudit}', reqs)
         else:
-            reqs = re.sub(r'(abstract_[a-zA-Z0-9]*)', r'\1 in reqs', reqs)
+            reqs = re.sub(r'(abstract_[a-zA-Z0-9]*)', fr'\1 in {subAudit}', reqs)
 
         return reqs
 
@@ -79,9 +79,6 @@ fact{
 	}
 }
 
-abstract sig AuditBlock{
-	reqs: set Course
-}
 """
 
         #collects all the subaudits
@@ -95,18 +92,18 @@ abstract sig AuditBlock{
 
                 #uses a unique name of the audit code and the name of the subAudit
                 subAudits.append(audit["info"]["code"]+"_"+name)
-                body += f"one sig {audit["info"]["code"]+"_"+name} extends AuditBlock {"{}{"}\n"
+                body += f"sig {audit["info"]["code"]+"_"+name} in Course {"{}\nfact {"}\n"
                 
                 #switches between two modes of either including all the courses or just specified ones and requiring a specific cardinality
                 if subAudit["cardinality"] == "ALL":#adds all the courses
                     for i, course in enumerate(subAudit["courses"]):
                         if course.startswith("abstract_"):
-                            body += f"{"and" if i > 0 else ""} (some c: {audit["info"]["code"]}_{course}| c in reqs)\n"
+                            body += f"{"and" if i > 0 else ""} (some c: {audit["info"]["code"]}_{course}| c in {audit["info"]["code"]+"_"+name})\n"
                         else:
-                            body += f'{"and" if i > 0 else ""} ({AuditGenerator.format_reqs_str(course, audit["info"]["code"])})\n'
+                            body += f'{"and" if i > 0 else ""} ({AuditGenerator.format_reqs_str(course, audit["info"]["code"], audit["info"]["code"]+"_"+name)})\n'
                 else: #adds all of the courses and requires the cardinality
-                    body += f'#reqs = {subAudit["cardinality"]}\n'
-                    body += re.sub(r'(abstract_[a-zA-Z0-9]*)', f"{audit["info"]["code"]}_" + r'\1', 'reqs in (' + " + ".join(subAudit["courses"])+")\n")
+                    body += f'#{audit["info"]["code"]+"_"+name} = {subAudit["cardinality"]}\n'
+                    body += re.sub(r'(abstract_[a-zA-Z0-9]*)', f"{audit["info"]["code"]}_" + r'\1', f'{audit["info"]["code"]+"_"+name} in (' + " + ".join(subAudit["courses"])+")\n")
                     # body += f'({AuditGenerator.format_reqs_str(subAudit["courses"][0], audit["info"]["code"])})\n'
                     # for course in islice(subAudit["courses"], 1, None):
                     #     body += f'or ({AuditGenerator.format_reqs_str(course, audit["info"]["code"])})\n'
@@ -120,12 +117,11 @@ abstract sig AuditBlock{
                     
             # }
 
-        pred = """
-pred complete{
-    all c: AuditBlock.reqs | once c in passedCourses
+        pred = "pred complete {\n"
+        for sub in subAudits:
+            pred += f"all c: {sub} | once c in passedCourses\n"
 
-"""
-        subAudits = [x+".reqs" for x in subAudits]
+        # subAudits = [x+".reqs" for x in subAudits]
         pred += "    disj[" + ",".join(subAudits) + "]\n}\n"
 
         run = """

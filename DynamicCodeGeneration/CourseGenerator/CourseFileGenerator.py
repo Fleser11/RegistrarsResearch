@@ -99,9 +99,9 @@ class CourseFileGenerator:
         #for each course in the course collection adds the course to the body
         #if the dept is not already in the body then adds it
         for code, course in courseCollection.get_course_list().items():
-            if course.dept not in depts:
-                depts.append(course.dept)
-                body += f"abstract sig {course.dept}Course extends Course{{}}\n"
+            # if course.dept not in depts:
+            #     depts.append(course.dept)
+            #     body += f"abstract sig {course.dept}Course extends Course{{}}\n"
             body += course.get_course_alloy()
 
         for course in abstractCourses:

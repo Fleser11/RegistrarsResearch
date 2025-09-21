@@ -1,10 +1,13 @@
 {
     "info": {
         "code": "GenEd",
-        "program": "General Education Courses"
+        "program": "General Education Courses",
+        "isGenEd": true
     },
-    "subAudit": {
-        "core": {
+    "subAudit": [
+        {
+            "name": "core",
+            "description":"",
             "cardinality": "ALL",
             "courses": [
                 "UN1015",
@@ -13,7 +16,9 @@
                 "abstract_SocialEthicalResponsibility"
             ]
         },
-        "HASS": {
+        {
+            "name": "HASS",
+            "description":"12 credits, six of the 12 credits must be at the 3000- or 4000- level",
             "cardinality": "ALL",
             "courses": [
                 "abstract_CommComp",
@@ -22,7 +27,5 @@
                 "abstract_HASS"
             ]
         }
-    },
-    "link": {
-    }
+    ]
 }

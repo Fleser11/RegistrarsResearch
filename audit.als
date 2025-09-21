@@ -19,7 +19,6 @@ pred semester {
 fact{
 	no semCourses.prereqs
 	semCourses' != semCourses
-	always Course' = Course
 	always{
 		semester
 		or
@@ -27,68 +26,84 @@ fact{
 	}
 }
 
-abstract sig AuditBlock{
-	reqs: set Course
+sig SCS22022_core in Course {}
+fact {
+ (CS1000 in SCS22022_core)
+and (CS1131 in SCS22022_core or (CS1121 in SCS22022_core and CS1122 in SCS22022_core))
+and (CS1142 in SCS22022_core)
+and (CS2311 in SCS22022_core or MA3210 in SCS22022_core)
+and (CS2321 in SCS22022_core)
+and (CS3000 in SCS22022_core)
+and (CS3141 in SCS22022_core)
+and (CS3311 in SCS22022_core)
+and (CS3331 in SCS22022_core)
+and (CS3411 in SCS22022_core)
+and (CS3421 in SCS22022_core)
+and (CS3425 in SCS22022_core)
+and (CS4121 in SCS22022_core)
+and (CS4321 in SCS22022_core)
+and (HU3120 in SCS22022_core)
+and (MA1160 in SCS22022_core or MA1161 in SCS22022_core)
+and (MA2330 in SCS22022_core)
+and (MA2720 in SCS22022_core or MA3710 in SCS22022_core)
 }
-one sig SCS22022_core extends AuditBlock {}{
- (CS1000 in reqs)
-and (CS1131 in reqs or (CS1121 in reqs and CS1122 in reqs))
-and (CS1142 in reqs)
-and (CS2311 in reqs or MA3210 in reqs)
-and (CS2321 in reqs)
-and (CS3000 in reqs)
-and (CS3141 in reqs)
-and (CS3311 in reqs)
-and (CS3331 in reqs)
-and (CS3411 in reqs)
-and (CS3421 in reqs)
-and (CS3425 in reqs)
-and (CS4121 in reqs)
-and (CS4321 in reqs)
-and (HU3120 in reqs)
-and (MA1160 in reqs or MA1161 in reqs)
-and (MA2330 in reqs)
-and (MA2720 in reqs or MA3710 in reqs)
+sig SCS22022_TechAndSociety in Course {}
+fact {
+#SCS22022_TechAndSociety = 1
+SCS22022_TechAndSociety in (HU3701 + HU3710 + HU3810 + MA4945 + SS3510 + SS3511 + SS3520 + SS3530 + SS3580 + SS3581 + SS3630 + SS3640 + SS3800 + SS3801)
 }
-one sig SCS22022_TechAndSociety extends AuditBlock {}{
-#reqs = 1
-reqs in (HU3701 + HU3710 + HU3810 + MA4945 + SS3510 + SS3511 + SS3520 + SS3530 + SS3580 + SS3581 + SS3630 + SS3640 + SS3800 + SS3801)
+sig SCS22022_LabScience in Course {}
+fact {
+#SCS22022_LabScience = 2
+SCS22022_LabScience in (SCS22022_abstract_BL + SCS22022_abstract_CH + SCS22022_abstract_PH + SCS22022_abstract_KIP + SCS22022_abstract_FW + SCS22022_abstract_GE + SCS22022_abstract_SS)
 }
-one sig SCS22022_LabScience extends AuditBlock {}{
-#reqs = 2
-reqs in (SCS22022_abstract_BL + SCS22022_abstract_CH + SCS22022_abstract_PH + SCS22022_abstract_KIP + SCS22022_abstract_FW + SCS22022_abstract_GE + SCS22022_abstract_SS)
+sig SCS22022_ConcentrationRequirement in Course {}
+fact {
+ (some c: SCS22022_abstract_CS4000a| c in SCS22022_ConcentrationRequirement)
+and (some c: SCS22022_abstract_CS4000b| c in SCS22022_ConcentrationRequirement)
+and (MA2160 in SCS22022_ConcentrationRequirement)
+and (some c: SCS22022_abstract_MA3000| c in SCS22022_ConcentrationRequirement)
 }
-one sig SCS22022_ConcentrationRequirement extends AuditBlock {}{
- (some c: SCS22022_abstract_CS4000a| c in reqs)
-and (some c: SCS22022_abstract_CS4000b| c in reqs)
-and (MA2160 in reqs)
-and (some c: SCS22022_abstract_MA3000| c in reqs)
+sig SCS22022_TechElectives in Course {}
+fact {
+#SCS22022_TechElectives = 3
+SCS22022_TechElectives in (SCS22022_abstract_TechElective)
 }
-one sig SCS22022_TechElectives extends AuditBlock {}{
-#reqs = 3
-reqs in (SCS22022_abstract_TechElective)
+sig SCS22022_FreeElectives in Course {}
+fact {
+#SCS22022_FreeElectives = 3
+SCS22022_FreeElectives in (SCS22022_abstract_FreeElective)
 }
-one sig SCS22022_FreeElectives extends AuditBlock {}{
-#reqs = 3
-reqs in (SCS22022_abstract_FreeElective)
+sig GenEd_core in Course {}
+fact {
+ (UN1015 in GenEd_core)
+and (UN1025 in GenEd_core)
+and (some c: GenEd_abstract_CriticalCreativeThinking| c in GenEd_core)
+and (some c: GenEd_abstract_SocialEthicalResponsibility| c in GenEd_core)
 }
-one sig GenEd_core extends AuditBlock {}{
- (UN1015 in reqs)
-and (UN1025 in reqs)
-and (some c: GenEd_abstract_CriticalCreativeThinking| c in reqs)
-and (some c: GenEd_abstract_SocialEthicalResponsibility| c in reqs)
+sig GenEd_HASS in Course {}
+fact {
+ (some c: GenEd_abstract_CommComp| c in GenEd_HASS)
+and (some c: GenEd_abstract_HumanditiesFineArts| c in GenEd_HASS)
+and (some c: GenEd_abstract_SocialandBehavioralSciences| c in GenEd_HASS)
+and (some c: GenEd_abstract_HASS| c in GenEd_HASS)
 }
-one sig GenEd_HASS extends AuditBlock {}{
- (some c: GenEd_abstract_CommComp| c in reqs)
-and (some c: GenEd_abstract_HumanditiesFineArts| c in reqs)
-and (some c: GenEd_abstract_SocialandBehavioralSciences| c in reqs)
-and (some c: GenEd_abstract_HASS| c in reqs)
+pred complete {
+all c: SCS22022_core | once c in passedCourses
+all c: SCS22022_TechAndSociety | once c in passedCourses
+all c: SCS22022_LabScience | once c in passedCourses
+all c: SCS22022_ConcentrationRequirement | once c in passedCourses
+all c: SCS22022_TechElectives | once c in passedCourses
+all c: SCS22022_FreeElectives | once c in passedCourses
+all c: GenEd_core | once c in passedCourses
+all c: GenEd_HASS | once c in passedCourses
+    disj[SCS22022_core,SCS22022_TechAndSociety,SCS22022_LabScience,SCS22022_ConcentrationRequirement,SCS22022_TechElectives,SCS22022_FreeElectives,GenEd_core,GenEd_HASS]
+}
+//
+fact{
+	GenEd_abstract_CommComp in semCourses'''''
+	(CS1000+UN1015) in semCourses
+	(UN1025 + CS1131) in semCourses'
 }
 
-pred complete{
-    all c: AuditBlock.reqs | once c in passedCourses
-
-    disj[SCS22022_core.reqs,SCS22022_TechAndSociety.reqs,SCS22022_LabScience.reqs,SCS22022_ConcentrationRequirement.reqs,SCS22022_TechElectives.reqs,SCS22022_FreeElectives.reqs,GenEd_core.reqs,GenEd_HASS.reqs]
-}
-
-run {eventually complete} for 74 Course, exactly 8 steps
+run {eventually complete} for 72 Course, exactly 8 steps

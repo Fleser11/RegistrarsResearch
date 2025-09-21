@@ -4,8 +4,10 @@
         "program": "Computer Science, Concentration: Computer Science",
         "totalCourses": 41
     },
-    "subAudit": {
-        "core": {
+    "subAudit": [
+        {
+            "name": "core",
+            "description":"Must take all CS1000, CS1131 or (CS1121 and CS1122), CS1142, CS2311 or MA3210, CS2321, CS3000, CS3141, CS3311, CS3331, CS3411, CS3421, CS3425, CS4121, CS4321, HU3120, MA1160 or MA1161, MA2330, MA2720 or MA3710",
             "cardinality": "ALL",
             "courses": [
                 "CS1000",
@@ -28,7 +30,9 @@
                 "MA2720 or MA3710"
             ]
         },
-        "TechAndSociety": {
+        {
+            "name": "TechAndSociety",
+            "description":"Select one of the following: HU3701, HU3710, HU3810, MA4945, SS3510, SS3511, SS3520, SS3530, SS3580, SS3581, SS3630, SS3640, SS3800, SS3801",
             "cardinality": "1",
             "courses": [
                 "HU3701", 
@@ -47,19 +51,18 @@
                 "SS3801"
             ]
         },
-        "LabScience": {
+        {
+            "name": "LabScience",
+            "description":"Students must complete two science courses in two different disciplines (BL, CH, KIP, FW, GE, PH, SS) from the general education science course list; at least one of these must include or be taken with the accompanying laboratory. Find eligible courses on the General Education webpage",
             "cardinality": "2",
             "courses": [
-                "abstract_BL",
-                "abstract_CH",
-                "abstract_PH",
-                "abstract_KIP",
-                "abstract_FW",
-                "abstract_GE",
-                "abstract_SS"
+                "abstract_LabScience",
+                "abstract_Science"
             ]
         },
-        "ConcentrationRequirement": {
+        {
+            "name": "ConcentrationRequirement",
+            "description":"CS 4000 - level, CS 4000 - level may be satisfied with, CS4099, MA 2160, MA 3000 - level",
             "cardinality": "ALL",
             "courses": [
                 "abstract_CS4000a",
@@ -68,20 +71,21 @@
                 "abstract_MA3000"
             ]
         },
-        "TechElectives": {
+        {
+            "name": "TechElectives",
+            "description":"See academic advisor for a list of approved technical electives to choose from. Note: Technical electives plus the two 4000 - level CS courses must total 15 credits.",
             "cardinality": "3",
             "courses": [
                 "abstract_TechElective"
             ]
         },
-        "FreeElectives": {
+        {
+            "name": "FreeElectives",
+            "description":"Any coursework is allowable, excluding co-curricular and coursework below the 1000- level.",
             "cardinality": "3",
             "courses": [
                 "abstract_FreeElective"
             ]
         }
-    },
-    "link": {
-        "path": "FullCSAlloyModel/GenEd.audit.json"
-    }
+    ]
 }
